@@ -1,37 +1,59 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { get } from 'svelte/store';
-  import { dailyRandomCard } from '$lib/stores/store';
   import { page } from '$app/stores';
   import * as Scry from 'scryfall-sdk';
   import CardImage from '$lib/components/card/CardImage.svelte';
   import CardText from '$lib/components/card/CardText.svelte';
-  import { parseManaCostAndText } from '$lib/common/common';
+  import { parseManaCost } from '$lib/common/common';
+  import { ProgressRadial } from '@skeletonlabs/skeleton';
 
-  let card: Scry.Card;
-
-  onMount(async () => {
-    card = await Scry.Cards.byName(get(page).params.id);
-    console.log(card);
-  });
+  const getCardByName = () => Scry.Cards.byName(get(page).params.id);
 </script>
 
 <section>
-  {#if card}
-    <CardImage {card} />
-    <h1 class="flex">
-      <span class="mr-2">{card?.name}</span>
-      <span class="mt-[2px]">
-        {#each parseManaCostAndText(card?.getCost()) as cardManaCost}
-          <abbr style="--mana-symbol-url: url({cardManaCost});" />
-        {/each}
-      </span>
-    </h1>
-    <p>{card?.type_line}</p>
-    <div>
-      <CardText effect={card?.getText()} flavor={card?.flavor_text} />
-    </div>
-  {/if}
+  {#await getCardByName()}
+    <!-- promise is pending -->
+    <ProgressRadial ... stroke={50} meter="stroke-primary-500" track="stroke-primary-500/30" />
+  {:then card}
+    {#if card.card_faces.length > 1}
+      <!-- content here -->
+      <CardImage {card} />
+      {#each card.card_faces as cardFace}
+        <!-- content here -->
+        <hr class="mt-[6px]" />
+        <h1 class="flex">
+          <span class="mr-2">{cardFace.name}</span>
+          <span class="mt-[2px]">
+            {#each parseManaCost(cardFace?.mana_cost) as cardManaCost}
+              <abbr style="--mana-symbol-url: url({cardManaCost});" />
+            {/each}
+          </span>
+        </h1>
+        <p>{cardFace?.type_line}</p>
+        <div>
+          <CardText effect={cardFace?.oracle_text} flavor={cardFace?.flavor_text} />
+        </div>
+      {/each}
+    {:else}
+      <CardImage {card} />
+      <hr class="mt-[6px]" />
+      <h1 class="flex">
+        <span class="mr-2">{card?.name}</span>
+        <span class="mt-[2px]">
+          {#each parseManaCost(card?.mana_cost) as cardManaCost}
+            <abbr style="--mana-symbol-url: url({cardManaCost});" />
+          {/each}
+        </span>
+      </h1>
+      <p>{card?.type_line}</p>
+      <div>
+        <CardText effect={card?.oracle_text} flavor={card?.flavor_text} />
+      </div>
+    {/if}
+  {:catch error}
+    <!-- promise was rejected -->
+  {/await}
 </section>
 
 <style>

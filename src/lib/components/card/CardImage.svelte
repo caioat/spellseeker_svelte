@@ -16,7 +16,7 @@
 
 <section>
   {#if navigate}
-    <a href="/card-details/{card?.id}">
+    <a href="/card-details/{card?.name}">
       <img
         src={card?.image_uris?.png}
         alt=""

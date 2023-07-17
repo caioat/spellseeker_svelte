@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { parseManaCostAndText } from '$lib/common/common';
+  import { parseCardTextAndSymbols } from '$lib/common/common';
 
   export let effect: string;
-  export let flavor: string;
+  export let flavor: string = '';
 </script>
 
 <section>
-  {#each parseManaCostAndText(effect) as cardPhrase}
+  {#each parseCardTextAndSymbols(effect) as cardPhrase}
     <p>
       {#each cardPhrase as cardText}
         {#if cardText.includes('svg')}
@@ -17,7 +17,7 @@
       {/each}
     </p>
   {/each}
-  <p>{flavor}</p>
+  <p><i>{flavor}</i></p>
 </section>
 
 <style>
