@@ -8,7 +8,7 @@
   import { AppShell, AppBar } from '@skeletonlabs/skeleton';
   import { AppRail, AppRailTile, AppRailAnchor } from '@skeletonlabs/skeleton';
   import Fa from 'svelte-fa/src/fa.svelte';
-  import { faDiceD20 } from '@fortawesome/free-solid-svg-icons/index'
+  import { faDiceD20 } from '@fortawesome/free-solid-svg-icons/index';
 </script>
 
 <!-- App Shell -->
@@ -44,6 +44,7 @@
         >
           GitHub
         </a>
+        <a class="btn btn-sm variant-ghost-surface" href="/login">Login</a>
       </svelte:fragment>
     </AppBar>
   </svelte:fragment>
@@ -52,7 +53,7 @@
     <AppRail>
       <AppRailAnchor href="/" title="Account" selected={true}>
         <svelte:fragment slot="lead">
-          <Fa icon={faDiceD20}></Fa>
+          <Fa icon={faDiceD20} />
         </svelte:fragment>
         <span>Anchor</span>
       </AppRailAnchor>

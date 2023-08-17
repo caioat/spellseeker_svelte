@@ -41,6 +41,8 @@
 	"type": "module",
 	"dependencies": {
 		"@fortawesome/free-solid-svg-icons": "^6.4.0",
+		"firebase": "^10.1.0",
+		"firebaseui": "^6.1.0",
 		"scryfall-sdk": "^4.1.1",
 		"svelte-fa": "^3.0.4"
 	}
