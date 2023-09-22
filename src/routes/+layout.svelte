@@ -5,11 +5,39 @@
   import '@skeletonlabs/skeleton/styles/skeleton.css';
   // Most of your app wide CSS should be put in this file
   import '../app.postcss';
-  import { AppShell, AppBar } from '@skeletonlabs/skeleton';
+  import {
+    Modal,
+    AppShell,
+    AppBar,
+    modalStore,
+    type ModalComponent,
+    type ModalSettings
+  } from '@skeletonlabs/skeleton';
   import { AppRail, AppRailTile, AppRailAnchor } from '@skeletonlabs/skeleton';
   import Fa from 'svelte-fa/src/fa.svelte';
   import { faDiceD20 } from '@fortawesome/free-solid-svg-icons/index';
+
+  import Login from '$lib/components/modals/Login.svelte';
+  const modalComponent: ModalComponent = {
+    // Pass a reference to your custom component
+    ref: Login,
+    // Add the component properties as key/value pairs
+    props: { background: 'bg-primary-500' },
+    // Provide a template literal for the default component slot
+    slot: '<p>Skeleton</p>'
+  };
+
+  const loginModal = () => {
+    const modal: ModalSettings = {
+      type: 'component',
+      // Pass the component directly:
+      component: modalComponent
+    };
+    modalStore.trigger(modal);
+  };
 </script>
+
+<Modal />
 
 <!-- App Shell -->
 <AppShell>
@@ -22,29 +50,13 @@
       <svelte:fragment slot="trail">
         <a
           class="btn btn-sm variant-ghost-surface"
-          href="https://discord.gg/EXqV7W8MtY"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Discord
-        </a>
-        <a
-          class="btn btn-sm variant-ghost-surface"
-          href="https://twitter.com/SkeletonUI"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Twitter
-        </a>
-        <a
-          class="btn btn-sm variant-ghost-surface"
           href="https://github.com/skeletonlabs/skeleton"
           target="_blank"
           rel="noreferrer"
         >
           GitHub
         </a>
-        <a class="btn btn-sm variant-ghost-surface" href="/login">Login</a>
+        <button class="btn btn-sm variant-ghost-surface" on:click={loginModal}>Login</button>
       </svelte:fragment>
     </AppBar>
   </svelte:fragment>
